@@ -12,3 +12,8 @@ function getComputerChoice() {
 
     return randomChoice;
 }
+
+function getHumanChoice() {
+    choice = prompt("Please, input your choice of: rock, paper or scissors.");
+    return choice.trim().toLowerCase();
+}
