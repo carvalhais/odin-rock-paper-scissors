@@ -1,81 +1,122 @@
+const MAX_ROUNDS_PER_GAME = 5;
+
+let humanScore = 0;
+let computerScore = 0;
+let roundsPlayed = 0;
+
 function getComputerChoice() {
-    let randomNumber = Math.random();
-    let randomChoice = null;
-
-    if (randomNumber < 1/3) {
-        randomChoice = "rock";
-    } else if (randomNumber < 2/3) {
-        randomChoice = "paper";
-    } else {
-        randomChoice = "scissors"
-    }
-
-    return randomChoice;
+    const options = ["rock", "paper", "scissors"];
+    return options[Math.floor(Math.random() * options.length)];
 }
 
-function getHumanChoice() {
-    choice = prompt("Please, input your choice of: rock, paper or scissors.");
-    return choice.trim().toLowerCase();
+function displayRound(message) {
+    const roundsList = document.querySelector("#rounds-list");
+    newItem = document.createElement("li");
+    newItem.textContent = message;
+    roundsList.appendChild(newItem);
 }
 
-function playGame() {
-    let computerScore = 0;
-    let humanScore = 0;
-
-    function playRound(computerChoice, humanChoice) {
-        console.log(`Computer chose "${computerChoice}".`);
-        console.log(`Human chose "${humanChoice}".`);
-
-        switch (computerChoice) {
-            case "rock":
-                if (humanChoice === "rock") {
-                    console.log("Tie! Both players chose rock.");
-                }
-                else if (humanChoice === "paper") {
-                    console.log("You win! Paper beats rock!");
-                    humanScore++;
-                }
-                else {
-                    console.log("You lose! Rock beats scissors!");
-                    computerScore++;
-                }
-                break;
-            case "paper":
-                if (humanChoice === "rock") {
-                    console.log("You lose! Paper beats rock!");
-                    computerScore++;
-                }
-                else if (humanChoice === "paper") {
-                    console.log("Tie! Both players chose rock.");
-                }
-                else {
-                    console.log("You win! Scissors beats paper!");
-                    humanScore++;
-                }
-                break;
-            case "scissors":
-                if (humanChoice === "rock") {
-                    console.log("You win! Rock beats scissors!");
-                    humanScore++;
-                }
-                else if (humanChoice === "paper") {
-                    console.log("You lose! Scissors beats paper!");
-                    computerScore++;
-                }
-                else {
-                    console.log("Tie! Both players chose scissors.");
-                }
-                break;
-        }
-    }
-
-    let i = 1;
-    while (i <= 5) {
-        console.log(`Playing round #${i}.`)
-        playRound(getComputerChoice(), getHumanChoice());
-        i++;
-    }
-
-    console.log(`Final computer score: ${computerScore}`);
-    console.log(`Final human score: ${humanScore}`);
+function updateScore() {
+    const humanPoints = document.querySelector("#player-points");
+    const computerPoints = document.querySelector("#computer-points");
+    humanPoints.textContent = humanScore;
+    computerPoints.textContent = computerScore;
 }
+
+function playRound(humanChoice, computerChoice) {
+    let message = `Human choice "${humanChoice}"; `;
+    message += `Computer choice "${computerChoice}"; `;
+
+    switch (computerChoice) {
+        case "rock":
+            if (humanChoice === "rock") {
+                message += "Result: Tie!";
+            }
+            else if (humanChoice === "paper") {
+                message += "Result: You win!";
+                humanScore++;
+            }
+            else {
+                message += "Result: Computer wins!";
+                computerScore++;
+            }
+            break;
+        case "paper":
+            if (humanChoice === "rock") {
+                message += "Result: Computer wins!";
+                computerScore++;
+            }
+            else if (humanChoice === "paper") {
+                message += "Result: Tie!";
+            }
+            else {
+                message += "Result: You win!";
+                humanScore++;
+            }
+            break;
+        case "scissors":
+            if (humanChoice === "rock") {
+                message += "Result: You win!";
+                humanScore++;
+            }
+            else if (humanChoice === "paper") {
+                message += "Result: Computer wins!";
+                computerScore++;
+            }
+            else {
+                message += "Result: Tie!";
+            }
+            break;
+    }
+    return message;
+}
+
+function humanChoiceHandler(choice) {
+    if (roundsPlayed < MAX_ROUNDS_PER_GAME) {
+        roundsPlayed++;
+        const message = playRound(choice, getComputerChoice());
+        displayRound(message);
+        updateScore();
+    }
+    if (roundsPlayed == MAX_ROUNDS_PER_GAME) {
+        const restartButton = document.querySelector("#restart-button");
+        restartButton.classList.remove("hide");
+    }
+};
+
+function restartHandler() {
+    roundsPlayed = 0;
+
+    humanScore = 0;
+    computerScore = 0;
+    updateScore();
+
+    const roundsList = document.querySelector("#rounds-list");
+    // for (const item of roundsList.children) {
+    //     item.remove();
+    // }
+    while (roundsList.firstChild) {
+        roundsList.removeChild(roundsList.lastChild);
+    }
+
+    const restartButton = document.querySelector("#restart-button");
+    restartButton.classList.add("hide");
+}
+
+const rockButton = document.querySelector("#rock-button");
+rockButton.addEventListener("click", () => {
+    humanChoiceHandler("rock");
+});
+
+const paperButton = document.querySelector("#paper-button");
+paperButton.addEventListener("click", () => {
+    humanChoiceHandler("paper");
+});
+
+const scissorsButton = document.querySelector("#scissors-button");
+scissorsButton.addEventListener("click", () => {
+    humanChoiceHandler("scissors");
+});
+
+const restartButton = document.querySelector("#restart-button");
+restartButton.addEventListener("click", restartHandler);

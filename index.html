@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Paper Scissors</title>
-    <script src="./rps.js"></script>
+    <title>Rock, Paper and Scissors</title>
+    <link rel="stylesheet" href="./rps.css">
+    <script src="./rps.js" defer></script>
+
 </head>
+
 <body>
-    
+    <h1>Rock, Paper and Scissors</h1>
+    <p class="subtitle-text">Please, click one of the buttons bellows to start
+        a match, or to make your round selection if a match has already started.</p>
+    <ul id="selection-list">
+        <li class="button" id="rock-button">Rock</li>
+        <li class="button" id="paper-button">Paper</li>
+        <li class="button" id="scissors-button">Scissors</li>
+    </ul>
+    <div id="score-board">
+        <p>Score board</p>
+        <div class="score" id="player-score">
+            Player score: <span id="player-points">0</span>
+        </div>
+        <div class="score" id="computer-score">
+            Computer score: <span id="computer-points">0</span>
+        </div>
+    </div>
+    <ul id="rounds-list">
+    </ul>
+    <div class="button restart-button hide" id="restart-button">Restart</div>
 </body>
+
 </html>
